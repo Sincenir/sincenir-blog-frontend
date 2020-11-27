@@ -1,28 +1,56 @@
 <template>
-  <div id="app">
-    <img alt="Vue logo" src="./assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js + TypeScript App"/>
+  <div @click="handleMenu(false)">
+    <q-btn
+      class="sincenir-home-menu"
+      outline
+      icon="menu"
+      size="md"
+      color="grey-4"
+      label="MENU"
+      @click.stop="handleMenu"
+    />
+    <left-drawer v-show="leftDrawerOpen" @handle-menu="handleMenu"></left-drawer>
+    <router-view @open-menu="handleMenu"></router-view>
   </div>
 </template>
 
 <script lang="ts">
-import { Component, Vue } from 'vue-property-decorator';
-import HelloWorld from './components/HelloWorld.vue';
+// import HelloWorld from './components/HelloWorld.vue'
+import Vue from "vue";
+// import HomePage from "./view/home/index.vue";
+import LeftDrawer from "./components/LeftDrawer.vue";
 
-@Component({
-  components: {
-    HelloWorld,
+export default Vue.extend({
+  name: "LayoutDefault",
+
+  data() {
+    return {
+      leftDrawerOpen: false
+    };
   },
-})
-export default class App extends Vue {}
+
+  methods: {
+    handleMenu(flag: boolean) {
+      this.leftDrawerOpen = flag;
+    }
+  },
+
+  components: {
+    // HomePage,
+    LeftDrawer
+    // HelloWorld
+  }
+});
 </script>
 
-<style lang="stylus">
-#app
-  font-family Avenir, Helvetica, Arial, sans-serif
-  -webkit-font-smoothing antialiased
-  -moz-osx-font-smoothing grayscale
-  text-align center
-  color #2c3e50
-  margin-top 60px
+<style>
+</style>
+
+<style lang="stylus" scoped>
+.sincenir-home-menu {
+  position: fixed !important;
+  left: 25px;
+  top: 25px;
+  z-index: 99;
+}
 </style>
