@@ -1,7 +1,9 @@
 import axios from 'axios';
 
 axios.defaults.timeout = 50000;
-// axios.defaults.baseURL = 'http://localhost:3000';  // 开着这个会导致跨域失效
+// 这个空字符串必须给, 这个问题调整了两天, 问题出在这里, 这里给地址会因为同源策略导致跨域
+// axios.defaults.baseURL = '';  // 开着这个会导致跨域失效
+// axios.defaults.baseURL = '';  // 开着这个会导致跨域失效
 
 // 请求拦截器
 // http request interceptor

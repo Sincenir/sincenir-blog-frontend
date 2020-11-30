@@ -16,6 +16,7 @@ module.exports = {
     // https: false,
     proxy: {
       "/api": {
+        // target: "http://39.106.83.197:3000", // 服务器测试
         target: "http://localhost:3000", // 本地测试
         ws: true, // websocket
         changeOrigin: true, // allow cross-domain

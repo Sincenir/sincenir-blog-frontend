@@ -17,3 +17,11 @@ export const api = {
   getBlogs,
   getBlog,
 };
+
+
+export interface Api {
+getGroups: () => any;
+getBlogs: () => any;
+getBlog: (id: number) => any;
+}
+

@@ -194,6 +194,7 @@ export default Vue.extend({
 
   async created() {
     let res = await this.$s.getGroups();
+    console.log(res);
     this.groups = res;
     // console.log(res);
   },
