@@ -2,7 +2,7 @@ import axios from 'axios';
 
 axios.defaults.timeout = 50000;
 // 这个空字符串必须给, 这个问题调整了两天, 问题出在这里, 这里给地址会因为同源策略导致跨域
-// axios.defaults.baseURL = '';  // 开着这个会导致跨域失效
+axios.defaults.baseURL = '';
 // axios.defaults.baseURL = '';  // 开着这个会导致跨域失效
 
 // 请求拦截器
@@ -11,7 +11,9 @@ axios.interceptors.request.use(
   (config: any): any => {
     // 配置请求头
     if (!config.headers?.["Content-Type"]) {
-      config.headers["Content-Type"] = "application/json;application/x-www-form-urlencoded;charset=UTF-8";
+      // config.headers["Content-Type"] = "application/json;application/x-www-form-urlencoded;charset=UTF-8";
+      config.headers["Content-Type"] = "application/json;charset=utf-8";
+      // 如果这里使用上面的请求头, 会导致后端只能接收空对象, 这里需要看完后端适配再做调整.
     }
 
     // 请求发送的数据在发送前更新为字符串
@@ -86,4 +88,18 @@ export function get(url: string, params = {}) {
       reject(err);
     });
   });
+}
+
+export function post(url: string, data?: {}) {
+  return new Promise((resolve, reject) => {
+      axios
+        .post(url, data)
+        .then(result => {
+          resolve(result.data);
+        })
+        .catch(err => {
+          reject(err);
+        });
+    }
+  );
 }

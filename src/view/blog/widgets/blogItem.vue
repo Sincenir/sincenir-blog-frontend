@@ -1,5 +1,5 @@
 <template>
-  <q-card dark bordered class="bg-grey-9 q-mt-md my-card" :style="{'min-width': '70vw'}">
+  <q-card dark bordered class="bg-grey-9 q-mt-md my-card" :style="{'width': '70vw'}" @click="handleBlogItemClick(data.id)">
     <q-card-section>
       <div class="text-h6">{{ data.name }}</div>
       <div class="text-subtitle2">{{ `by${data.creator}` }}</div>
@@ -9,7 +9,7 @@
 
     <q-card-section>
       <!-- {{ data.markdown }} -->
-      <!-- <div v-html="data.title"></div> -->
+      <div>{{ data.title }}</div>
     </q-card-section>
   </q-card>
 </template>
@@ -23,6 +23,15 @@ export default Vue.extend({
   data() {
     return {
       html: ''
+    }
+  },
+
+  methods: {
+    handleBlogItemClick(id: number) {
+      this.$router.push({
+        path: '/blogDetails',
+        query: { id: String(id) }
+      });
     }
   },
 })

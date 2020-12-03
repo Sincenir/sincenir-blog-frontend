@@ -1,7 +1,6 @@
 <template>
   <transition name="left-drawer">
     <div @click.stop class="left-drawer">
-
       <q-scroll-area
         :thumb-style="thumbStyle"
         :content-style="contentStyle"
@@ -28,7 +27,13 @@
         <!-- 菜单 -->
         <div>
           <q-list v-for="(menuItem, index) in menuList" :key="index">
-            <q-item clickable v-ripple class="text-grey-1" :to="`/${menuItem.key}`" @click="$emit('handle-menu', false)">
+            <q-item
+              clickable
+              v-ripple
+              class="text-grey-1"
+              :to="`/${menuItem.key}`"
+              @click="$emit('handle-menu', false)"
+            >
               <q-item-section avatar>
                 <q-icon :name="menuItem.icon" />
               </q-item-section>
@@ -43,18 +48,9 @@
           <q-date v-model="date" minimal class="bg-grey-5" />
         </div>
 
-        <div class="sincenir-center q-pt-sm">
-          
-        <q-btn 
-          @click="handleTreeClick"
-          color="red"
-        >aasdsadjasdkl</q-btn>
-        </div>
-
-
         <!-- 语言分类 -->
-        <div class="sincenir-left q-pl-md">
-          <q-tree
+        <div class="sincenir-left q-px-md q-gutter-sm">
+          <!-- <q-tree
             class="text-grey-1"
             dark
             :nodes="groups"
@@ -64,7 +60,41 @@
             node-key="id"
             label-key="name"
             @update:selected="handleTreeClick"
-          />
+          />-->
+          <q-tree
+            class="full-width"
+            :nodes="groups"
+            node-key="id"
+            default-expand-all
+            :selected.sync="selectedKey"
+          >
+            <template v-slot:default-header="prop">
+              <div>
+                <div class="text-weight-bold text-primary col-8">{{ prop.node.name }}</div>
+                <q-icon
+                  name="add"
+                  color="grey-1"
+                  size="20px"
+                  class="q-mr-sm q-mt-xs absolute-right"
+                  @click.stop
+                >
+                  <q-popup-edit v-model="createGroupName" content-class="bg-dark text-white">
+                    <template v-slot="{ set }">
+                      <q-input dark v-model="createGroupName" hint="新的组名" dense autofocus counter>
+                        <template v-slot:append>
+                          <q-icon
+                            color="positive"
+                            name="check_circle"
+                            @click.stop="() => {set();handleCreateGroup(prop.node.id, prop.node.level);}"
+                          />
+                        </template>
+                      </q-input>
+                    </template>
+                  </q-popup-edit>
+                </q-icon>
+              </div>
+            </template>
+          </q-tree>
         </div>
 
         <!-- 技巧 -->
@@ -79,11 +109,13 @@
 
 <script lang="ts">
 import Vue from "vue";
-import { get } from '@/api/server.ts';
+import { get } from "@/api/server.ts";
 
 export default Vue.extend({
   data() {
     return {
+      createGroupName: "",
+      selectedKey: -1,
       date: "2019/02/01",
       menuList: [
         {
@@ -186,7 +218,7 @@ export default Vue.extend({
           ]
         }
       ],
-      selected: '前端',
+      selected: "前端",
 
       groups: []
     };
@@ -194,24 +226,42 @@ export default Vue.extend({
 
   async created() {
     let res = await this.$s.getGroups();
-    console.log(res);
     this.groups = res;
     // console.log(res);
   },
 
+  watch: {
+    selectedKey: function(val) {
+      console.log(val);
+      this.$router.push({
+        path: "/blog",
+        query: { id: String(val) }
+      });
+      this.$emit("handle-menu", false);
+    }
+  },
+
   methods: {
     handleMenuClick(val: any) {
-      console.log(val);
+      // console.log(val);
     },
 
     handleTreeClick(target: number | null) {
       this.$router.push({
-        path: '/blog',
+        path: "/blog",
         query: { id: String(target) }
       });
-      this.$emit('handle-menu', false)
+      this.$emit("handle-menu", false);
+    },
+
+    handleCreateGroup(id: number, level: number) {
+      this.$s.createBlogGroup({
+        parent_id: id,
+        level: level + 1,
+        name: this.createGroupName
+      });
     }
-  },
+  }
 });
 </script>
 
@@ -230,9 +280,9 @@ export default Vue.extend({
   overflow-y: auto;
 
   .sincenir-btn-close {
-    position absolute
-    right 15px
-    top 15px
+    position: absolute;
+    right: 15px;
+    top: 15px;
   }
 }
 

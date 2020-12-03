@@ -2,10 +2,9 @@
   <div @click="handleMenu(false)">
     <q-btn
       class="sincenir-home-menu"
-      outline
       icon="menu"
       size="md"
-      color="grey-4"
+      color="grey-5"
       label="MENU"
       @click.stop="handleMenu"
     />
