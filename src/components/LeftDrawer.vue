@@ -85,7 +85,7 @@
                           <q-icon
                             color="positive"
                             name="check_circle"
-                            @click.stop="() => {set();handleCreateGroup(prop.node.id, prop.node.level);}"
+                            @click.stop="() => {set();handleCreateGroup(prop.node);}"
                           />
                         </template>
                       </q-input>
@@ -227,12 +227,13 @@ export default Vue.extend({
   async created() {
     let res = await this.$s.getGroups();
     this.groups = res;
-    // console.log(res);
   },
 
   watch: {
     selectedKey: function(val) {
-      console.log(val);
+      if (val == null) {
+        return;
+      }
       this.$router.push({
         path: "/blog",
         query: { id: String(val) }
@@ -254,12 +255,17 @@ export default Vue.extend({
       this.$emit("handle-menu", false);
     },
 
-    handleCreateGroup(id: number, level: number) {
+    handleCreateGroup(node: any) {
       this.$s.createBlogGroup({
-        parent_id: id,
-        level: level + 1,
+        parent_id: node.id,
+        level: node.level + 1,
         name: this.createGroupName
-      });
+      })
+      .then((result: any) => {
+        // this.
+        node.children.push(result[0]);
+        this.$cyy.toast('创建成功');
+      })
     }
   }
 });

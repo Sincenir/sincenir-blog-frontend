@@ -53,7 +53,6 @@ export default {
         })
         .onOk(async (result) => {
           const res = await this.$s.createBlog(result);
-          console.log(res);
           this.blogs.unshift(res[0]);
         });
     }
