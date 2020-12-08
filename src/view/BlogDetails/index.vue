@@ -16,7 +16,7 @@
       :toolbarsFlag="false"
       :scrollStyle="true"
     />
-    <mavon-editor style="z-index: 2" v-else v-model="blogDetails.blog" @save="saveBlog" />
+    <mavon-editor ref="md" style="z-index: 2" v-else v-model="blogDetails.blog" @save="saveBlog" @imgAdd="handleUploadImage" />
     <q-btn
       v-if="!isEdit"
       class="fixed-bottom-right q-mb-xl q-mr-xl"
@@ -29,6 +29,8 @@
 </template>
 
 <script>
+import axios from 'axios';
+
 export default {
   data() {
     return {
@@ -54,6 +56,27 @@ export default {
       }).catch((err) => {
         this.$cyy.toast(err.message, 'error')
       });
+    },
+
+    handleUploadImage(pos, file) {
+      // // 第一步.将图片上传到服务器.
+      // let formdata = new FormData();
+      // formdata.append('files', file);
+      // this.$s.uploadFile(formdata)
+      // .then((result) => {
+      //   console.log(result);
+      // }).catch((err) => {
+      //   console.log(err);
+      // });
+      // axios({
+      //     url: '/api/upload/blog/image',
+      //     method: 'post',
+      //     data: formdata,
+      //     headers: { 'Content-Type': 'multipart/form-data' },
+      // }).then((url) => {
+      //   console.log(url);
+      //     // $vm.$img2Url(pos, url);
+      // })
     }
   },
 };

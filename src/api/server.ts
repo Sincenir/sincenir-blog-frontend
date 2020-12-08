@@ -1,5 +1,6 @@
 import axios from 'axios';
 import { toast } from '@/components/toast';
+import { SessionStorage } from 'quasar';
 
 axios.defaults.timeout = 50000;
 // 这个空字符串必须给, 这个问题调整了两天, 问题出在这里, 这里给地址会因为同源策略导致跨域
@@ -11,9 +12,11 @@ axios.defaults.baseURL = '';
 axios.interceptors.request.use(
   (config: any): any => {
     // 配置请求头
-    if (!config.headers?.["Content-Type"]) {
+    if (!config.headers?.['Content-Type']) {
       // config.headers["Content-Type"] = "application/json;application/x-www-form-urlencoded;charset=UTF-8";
-      config.headers["Content-Type"] = "application/json;charset=utf-8";
+      config.headers['Content-Type'] = 'application/json;charset=utf-8';
+      config.headers.Authorization = SessionStorage.getItem('token');
+      console.log(config.headers.Authorization);
       // 如果这里使用上面的请求头, 会导致后端只能接收空对象, 这里需要看完后端适配再做调整.
     }
 

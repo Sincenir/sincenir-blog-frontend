@@ -16,6 +16,7 @@
 <script lang="ts">
 // import HelloWorld from './components/HelloWorld.vue'
 import Vue from "vue";
+import { SessionStorage } from 'quasar';
 // import HomePage from "./view/home/index.vue";
 import LeftDrawer from "./components/LeftDrawer.vue";
 
@@ -30,7 +31,15 @@ export default Vue.extend({
 
   methods: {
     handleMenu(flag: boolean) {
-      this.leftDrawerOpen = flag;
+      if (flag) {
+        if (SessionStorage.has('token')) {
+          this.leftDrawerOpen = true;
+        } else [
+          this.$cyy.toast('请先登陆')
+        ]
+      } else {
+        this.leftDrawerOpen = false;
+      }
     }
   },
 
